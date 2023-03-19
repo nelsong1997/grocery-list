@@ -1,25 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import List from './List.js'
+import './styles.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+	constructor() {
+		super()
+		this.state = {
+			page: "list"
+		}	
+	}
+
+	render() {
+		if (this.state.page==="list") return <List />
+		//else if (this.state.page==="items") return <Items />
+		else return <p>Awky momo! (That's an error :P)</p>
+	}
 }
 
 export default App;

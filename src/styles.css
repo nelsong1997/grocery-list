@@ -1,0 +1,22 @@
+p, label {
+	font-family: arial;
+	color: white;
+}
+
+body {
+	background-color: gray;
+	margin: 0px;
+	height: 100vh;
+}
+
+.columns {
+	display: flex;
+}
+
+.center-box {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	justify-content: center;
+	height: 100vh;
+}
