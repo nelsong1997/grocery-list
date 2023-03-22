@@ -1,6 +1,10 @@
-p, label {
+p, label, h1, h2, h3, h4 {
 	font-family: arial;
 	color: white;
+}
+
+p, label, h4 {
+	font-size: 4vh
 }
 
 body {
@@ -9,8 +13,19 @@ body {
 	height: 100vh;
 }
 
-.columns {
+.columns-box {
 	display: flex;
+}
+
+.column {
+	min-width: 5vw;
+}
+
+.inner-box {
+	outline: 1px solid black;
+	display: flex;
+	flex-direction: column;
+	padding: .5vh
 }
 
 .center-box {
