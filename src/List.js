@@ -18,6 +18,8 @@ class List extends React.Component {
 
 		let categoryItemsJSX = []
 
+		if (categoryItems.length===0) categoryItems.push("none") //need to make sure this can't be interacted with later
+
 		for (let item of categoryItems) {
 			categoryItemsJSX.push(
 				<label>{item}</label>
@@ -25,25 +27,25 @@ class List extends React.Component {
 		}
 
 		return (
-			<div className="inner-box" style={{outline: "true"}}>
-				<strong><label>{categoryName}</label></strong>
-				{categoryItemsJSX}
+			<div className="category-box">
+				<div className="inner-box">
+					<strong><label>{categoryName}</label></strong>
+				</div>
+				<div className="inner-box">
+					{categoryItemsJSX}
+				</div>
 			</div>
 		)
 	}
 
 	render() {
 		return (
-			<div className="center-box">
-				<div className="columns-box">
-					<div className="column">
-						{this.displayListCategory(0)}
-						{this.displayListCategory(1)}
-					</div>
-					<div className="column">
-						{this.displayListCategory(2)}
-						{this.displayListCategory(3)}
-					</div>
+			<div id="center-box">
+				<div className="grid">
+					{this.displayListCategory(0)}
+					{this.displayListCategory(1)}
+					{this.displayListCategory(2)}
+					{this.displayListCategory(3)}
 				</div>
 			</div>
 		)
@@ -75,7 +77,8 @@ let someData = {
 		{
 			categoryName: "cat4",
 			items: [
-				"apple4", "banana4"
+				"apple4", "banana4", "potato4", "banana4", "potato4", "banana4", "potato4", "banana4", "potato4", "banana4", "potato4",
+				"apple4", "banana4", "potato4", "banana4", "potato4", "banana4", "potato4", "banana4", "potato4", "banana4"
 			]
 		}
 	]

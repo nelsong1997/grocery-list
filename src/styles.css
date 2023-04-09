@@ -4,34 +4,44 @@ p, label, h1, h2, h3, h4 {
 }
 
 p, label, h4 {
-	font-size: 4vh
+	font-size: 3.5vh
 }
 
 body {
 	background-color: gray;
 	margin: 0px;
-	height: 100vh;
+	min-height: 100vh;
 }
 
-.columns-box {
-	display: flex;
+.grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
 }
 
-.column {
-	min-width: 5vw;
-}
-
-.inner-box {
-	outline: 1px solid black;
-	display: flex;
-	flex-direction: column;
-	padding: .5vh
-}
-
-.center-box {
+#center-box {
+	margin-top: 2vh;
 	display: flex;
 	align-items: center;
 	width: 100%;
 	justify-content: center;
-	height: 100vh;
+	min-height: 100vh;
+}
+
+.inner-box {
+	border: 2px solid black;
+	margin: -1px;
+	width: 24vh;
+	padding: 1vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.inner-box:nth-child(2) {
+	flex-grow: 1;
+}
+
+.category-box {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
 }
