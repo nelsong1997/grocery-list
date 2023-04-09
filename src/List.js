@@ -8,45 +8,46 @@ class List extends React.Component {
 			property: "value"
 		}
 
-		this.displayListCategory = this.displayListCategory.bind(this);
+		this.displayListCategory = this.displayListCategories.bind(this);
 	}
 
-	displayListCategory(categoryIndex) {
-		let categoryObj = someData.itemCategories[categoryIndex]
-		let categoryName = categoryObj.categoryName
-		let categoryItems = categoryObj.items
+	displayListCategories() {
+		let returnJSX = []
 
-		let categoryItemsJSX = []
+		for (let categoryIndex = 0; categoryIndex < 4; categoryIndex++) {
+			let categoryObj = someData.itemCategories[categoryIndex]
+			let categoryName = categoryObj.categoryName
+			let categoryItems = categoryObj.items
 
-		if (categoryItems.length===0) categoryItems.push("none") //need to make sure this can't be interacted with later
+			let categoryItemsJSX = []
 
-		for (let item of categoryItems) {
-			categoryItemsJSX.push(
-				<label>{item}</label>
+			if (categoryItems.length===0) categoryItems.push("none") //need to make sure this can't be interacted with later
+
+			for (let item of categoryItems) {
+				categoryItemsJSX.push(
+					<label>{item}</label>
+				)
+			}
+
+			returnJSX.push(
+				<div className="category-box">
+					<div className="inner-box">
+						<strong><label>{categoryName}</label></strong>
+					</div>
+					<div className="inner-box">
+						{categoryItemsJSX}
+					</div>
+				</div>
 			)
 		}
 
-		return (
-			<div className="category-box">
-				<div className="inner-box">
-					<strong><label>{categoryName}</label></strong>
-				</div>
-				<div className="inner-box">
-					{categoryItemsJSX}
-				</div>
-			</div>
-		)
+		return returnJSX
 	}
 
 	render() {
 		return (
-			<div id="center-box">
-				<div className="grid">
-					{this.displayListCategory(0)}
-					{this.displayListCategory(1)}
-					{this.displayListCategory(2)}
-					{this.displayListCategory(3)}
-				</div>
+			<div className="grid">
+				{this.displayListCategories()}
 			</div>
 		)
 	}
@@ -77,7 +78,6 @@ let someData = {
 		{
 			categoryName: "cat4",
 			items: [
-				"apple4", "banana4", "potato4", "banana4", "potato4", "banana4", "potato4", "banana4", "potato4", "banana4", "potato4",
 				"apple4", "banana4", "potato4", "banana4", "potato4", "banana4", "potato4", "banana4", "potato4", "banana4"
 			]
 		}

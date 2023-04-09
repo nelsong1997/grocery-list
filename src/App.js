@@ -11,8 +11,18 @@ class App extends React.Component {
 	}
 
 	render() {
-		if (this.state.page==="list") return <List />
-		//else if (this.state.page==="items") return <Items />
+		let currentComponent = null
+		if (this.state.page==="list") currentComponent = <List />
+		//else if (this.state.page==="items") currentComponent = <Items />
+		return (
+			<div id="center-box">
+				<div id="view-select">
+					<button>list</button>
+					<button>items</button>
+				</div>
+				{currentComponent}
+			</div>
+		)
 	}
 }
 
