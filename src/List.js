@@ -2,35 +2,35 @@ import React from 'react'
 import './styles.css';
 
 class List extends React.Component {
-	constructor() {
-		super()
-		this.state = {
-			property: "value"
-		}
-
-		this.displayListCategory = this.displayListCategories.bind(this);
-	}
 
 	displayListCategories() {
+		let categories = this.props.data.itemCategories
+		if (!categories) return null
 		let returnJSX = []
 
 		for (let categoryIndex = 0; categoryIndex < 4; categoryIndex++) {
-			let categoryObj = someData.itemCategories[categoryIndex]
+			let categoryObj = categories[categoryIndex]
 			let categoryName = categoryObj.categoryName
 			let categoryItems = categoryObj.items
 
 			let categoryItemsJSX = []
 
-			if (categoryItems.length===0) categoryItems.push("none") //need to make sure this can't be interacted with later
-
-			for (let item of categoryItems) {
+			for (let i=0; i<categoryItems.length; i++) {
+				let itemObj = categoryItems[i]
+				if (!itemObj.selected) continue
 				categoryItemsJSX.push(
-					<label>{item}</label>
+					<label key={i}>{itemObj.itemName}</label>
+				)
+			}
+
+			if (categoryItemsJSX.length===0) {
+				categoryItemsJSX.push(
+					<label key="0"><em>(none)</em></label>
 				)
 			}
 
 			returnJSX.push(
-				<div className="category-box">
+				<div className="category-box" key={categoryIndex}>
 					<div className="inner-box">
 						<strong><label>{categoryName}</label></strong>
 					</div>
@@ -54,32 +54,3 @@ class List extends React.Component {
 }
 
 export default List;
-
-let someData = {
-	itemCategories: [
-		{
-			categoryName: "cat1",
-			items: [
-				"apple", "banana", "cheese"
-			]
-		},
-		{
-			categoryName: "cat2",
-			items: [
-				"apple2", "banana2"
-			]
-		},
-		{
-			categoryName: "cat3",
-			items: [
-				"apple3", "banana3"
-			]
-		},
-		{
-			categoryName: "cat4",
-			items: [
-				"apple4", "banana4", "potato4", "banana4", "potato4", "banana4", "potato4", "banana4", "potato4", "banana4"
-			]
-		}
-	]
-}
