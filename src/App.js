@@ -11,17 +11,94 @@ class App extends React.Component {
 			data: {}
 		}
 
-		this.saveNewCategoryName = this.saveNewCategoryName.bind(this)
+		this.updateCategoryName = this.updateCategoryName.bind(this)
+		this.toggleItemSelect = this.updateCategoryName.bind(this)
+		this.addItem = this.addItem.bind(this)
 	}
 
+	// load data
 	componentDidMount() {
-		this.setState({data: someData})
+		let dataStr = localStorage.getItem("data")
+
+		const defaultData = {
+			itemCategories: [
+				{
+					categoryName: "category 1",
+					items: []
+				},
+				{
+					categoryName: "category 2",
+					items: []
+				},
+				{
+					categoryName: "category 3",
+					items: []
+				},
+				{
+					categoryName: "category 4",
+					items: []
+				}
+			]
+		}
+
+
+		let theData = defaultData
+
+		try {
+			theData = JSON.parse(dataStr)
+		} catch (err) {
+			theData = defaultData
+		}
+
+		// sort items alphabetically
+		for (let i=0; i<4; i++) {
+			theData.itemCategories.sort(
+				(a, b) =>  a.itemName > b.itemName ? 1 : -1
+			)
+		}
+
+		this.saveData(theData)
 	}
 
-	saveNewCategoryName(categoryIndex, newName) {
+	saveData(data) {
+		localStorage.setItem("data", JSON.stringify(data))
+		this.setState({data: data})
+	}
+
+	updateCategoryName(categoryIndex, newName) {
 		let stateData = this.state.data
 		stateData.itemCategories[categoryIndex].categoryName = newName
-		this.setState({data: stateData})
+		this.saveData(stateData)
+	}
+
+	toggleItemSelect(categoryIndex, itemIndex) {
+		let stateData = this.state.data
+		stateData.itemCategories[categoryIndex].items[itemIndex].selected =
+			!stateData.itemCategories[categoryIndex].items[itemIndex].selected
+		this.saveData(stateData)
+	}
+
+	addItem(categoryIndex, itemName, qtySelect) {
+		let stateData = this.state.data
+		let newCategoryItems = stateData.itemCategories[categoryIndex].items
+
+		newCategoryItems.push(
+			{
+				itemName: itemName,
+				selected: true,
+				crossedOff: false,
+				qtySelect: qtySelect,
+				qty: 1
+			}
+		)
+
+		newCategoryItems.sort(
+			(a, b) =>  a.itemName > b.itemName ? 1 : -1
+		)
+
+		stateData.itemCategories[categoryIndex].items = newCategoryItems
+
+		this.saveData(stateData)
 	}
 
 	render() {
@@ -30,14 +107,15 @@ class App extends React.Component {
 			currentComponent = 
 				<List 
 					data={this.state.data}
-					//saveNewCategoryName={this.saveNewCategoryName}
 				/>
 		}
 		else if (this.state.page==="items") {
 			currentComponent =
 				<Items
 					data={this.state.data}
-					saveNewCategoryName={this.saveNewCategoryName}
+					updateNewCategoryName={this.updateCategoryName}
+					toggleItemSelect={this.toggleItemSelect}
+					addItem={this.addItem}
 				/>
 		}
 		return (
@@ -54,75 +132,83 @@ class App extends React.Component {
 
 export default App;
 
-let someData = {
-	itemCategories: [
-		{
-			categoryName: "category 1",
-			items: [
-				{
-					itemName: "banana",
-					selected: true,
-					qtySelect: false,
-					qty: null
-				},
-				{
-					itemName: "apple",
-					selected: false,
-					qtySelect: true,
-					qty: null
-				}
-			]
-		},
-		{
-			categoryName: "category 2",
-			items: [
-				{
-					itemName: "banana2",
-					selected: false,
-					qtySelect: false,
-					qty: null
-				},
-				{
-					itemName: "apple2",
-					selected: false,
-					qtySelect: true,
-					qty: null
-				}
-			]
-		},
-		{
-			categoryName: "category 3",
-			items: [
-				{
-					itemName: "banana3",
-					selected: false,
-					qtySelect: false,
-					qty: null
-				},
-				{
-					itemName: "apple3",
-					selected: false,
-					qtySelect: true,
-					qty: null
-				}
-			]
-		},
-		{
-			categoryName: "category 4",
-			items: [
-				{
-					itemName: "banana4",
-					selected: false,
-					qtySelect: false,
-					qty: null
-				},
-				{
-					itemName: "apple4",
-					selected: false,
-					qtySelect: true,
-					qty: null
-				}
-			]
-		}
-	]
-}
+// let someData = {
+// 	itemCategories: [
+// 		{
+// 			categoryName: "category 1",
+// 			items: [
+// 				{
+// 					itemName: "banana",
+// 					selected: true,
+// 					qtySelect: false,
+// 					qty: null,
+//					crossedOff: false
+// 				},
+// 				{
+// 					itemName: "apple",
+// 					selected: false,
+// 					qtySelect: true,
+// 					qty: null,
+//					crossedOff: false
+// 				}
+// 			]
+// 		},
+// 		{
+// 			categoryName: "category 2",
+// 			items: [
+// 				{
+// 					itemName: "banana2",
+// 					selected: false,
+// 					qtySelect: false,
+// 					qty: null,
+//					crossedOff: false
+// 				},
+// 				{
+// 					itemName: "apple2",
+// 					selected: false,
+// 					qtySelect: true,
+// 					qty: null,
+//					crossedOff: false
+// 				}
+// 			]
+// 		},
+// 		{
+// 			categoryName: "category 3",
+// 			items: [
+// 				{
+// 					itemName: "banana3",
+// 					selected: false,
+// 					qtySelect: false,
+// 					qty: null,
+//					crossedOff: false
+// 				},
+// 				{
+// 					itemName: "apple3",
+// 					selected: false,
+// 					qtySelect: true,
+// 					qty: null,
+//					crossedOff: false
+// 				}
+// 			]
+// 		},
+// 		{
+// 			categoryName: "category 4",
+// 			items: [
+// 				{
+// 					itemName: "banana4",
+// 					selected: false,
+// 					qtySelect: false,
+// 					qty: null,
+//					crossedOff: false
+// 				},
+// 				{
+// 					itemName: "apple4",
+// 					selected: false,
+// 					qtySelect: true,
+// 					qty: null,
+//					crossedOff: false
+// 				}
+// 			]
+// 		}
+// 	]
+// }

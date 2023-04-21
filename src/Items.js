@@ -6,10 +6,13 @@ class Items extends React.Component {
 		super()
 		this.state = {
 			categoryIndex: 0,
-			editingCategoryName: false
+			editingCategoryName: false,
+			addingItem: false,
+			itemSearch: ""
 		}
 
 		this.categoryNameInput = React.createRef()
+		this.itemNameInput = React.createRef()
 
 		this.handleCategorySave = this.handleCategorySave.bind(this);
 	}
@@ -39,18 +42,92 @@ class Items extends React.Component {
 		)
 	}
 
+	displayItemSearch() {
+		return (
+			<div>
+				<input key="item-search"
+					onChange={(e)=>{this.setState({itemSearch: e.target.value})}}
+					placeholder="search for item"
+				/>
+				<button onClick={()=>{this.setState({addingItem: true})}}>new item</button>
+			</div>
+			
+		)
+	}
+
+	displayAddItem() {
+		return (
+			<div>
+				<input key="item-name-input"
+					ref={this.itemNameInput}
+					placeholder="new item name"
+				/>
+				<button onClick={()=>{this.handleSaveItem()}}>save</button>
+				<button
+					onClick={()=>{this.setState({addingItem: false, itemSearch: ""})}}
+				>x</button>
+			</div>
+		)
+	}
+
+	displayItemList() {
+		let categoryIndex = this.state.categoryIndex
+		let categoryItems = this.props.data.itemCategories[categoryIndex].items
+		
+		let itemSearch = this.state.itemSearch
+
+		let itemsJSX = []
+
+		const selectedStyle = {fontWeight: "bold"}
+		const unselectedStyle = {fontStyle: "italic", color: "rgb(200,200,200)"}
+
+		for (let i=0; i<categoryItems.length; i++) {
+			let item = categoryItems[i]
+			let itemName = item.itemName
+			let isSelected = item.selected
+
+			if (itemName && !itemName.includes(itemSearch)) continue
+
+			itemsJSX.push(
+				<div
+					key={i} className="item-box"
+					onClick={()=>this.props.toggleItemSelect(categoryIndex, i)}
+				>
+					<label
+						style={isSelected ? selectedStyle : unselectedStyle}
+						className="item">{itemName}
+					</label>
+				</div>
+			)
+		}
+
+		return(
+			<div>
+				{itemsJSX}
+			</div>
+		)
+	}
+
 	handleCategoryEdit() {
 		this.setState({editingCategoryName: true})
 	}
 
 	handleCategorySave() {
-		this.props.saveNewCategoryName(this.state.categoryIndex, this.categoryNameInput.current.value)
+		this.props.updateCategoryName(this.state.categoryIndex, this.categoryNameInput.current.value)
 		this.setState({editingCategoryName: false})
+	}
+
+	handleSaveItem() {
+		this.props.addItem(
+			this.state.categoryIndex,
+			this.itemNameInput.current.value,
+			false
+		)
 	}
 
 	render() {
 		return (
-			<div>
+			<div id="items-box">
 				<div>
 					{this.state.editingCategoryName ? this.displayEditCategoryInput() : this.displayCategoryDropdown()}
 					<button onClick={()=>{
@@ -59,7 +136,12 @@ class Items extends React.Component {
 							{this.state.editingCategoryName ? "save" : "edit"}
 					</button>
 				</div>
-				<p>{this.state.categoryIndex}</p>
+				<div>
+					{this.state.addingItem ? this.displayAddItem() : this.displayItemSearch()}
+				</div>
+				<div>
+					{this.displayItemList()}
+				</div>
 			</div>
 		)
 	}
