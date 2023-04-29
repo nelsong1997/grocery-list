@@ -93,3 +93,19 @@ input {
 	margin-top: 2vh;
 	margin-bottom: 2vh;
 }
+
+#dimmer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: rgba(0, 0, 0, .5);
+	height: 100%;
+	width: 100%;
+}
+
+#add-item {
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: red;
+}

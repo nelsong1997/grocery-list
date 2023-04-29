@@ -58,16 +58,24 @@ class Items extends React.Component {
 	displayAddItem() {
 		return (
 			<div>
-				<input key="item-name-input"
-					ref={this.itemNameInput}
-					placeholder="new item name"
-				/>
-				<button onClick={()=>{this.handleSaveItem()}}>save</button>
-				<button
-					onClick={()=>{this.setState({addingItem: false, itemSearch: ""})}}
-				>x</button>
+				<div style={{zIndez: "1"}} id="dimmer"></div>
+				<div id="add-item" style={{zIndex: "10"}}>
+					<label>add new item</label>
+				</div>
 			</div>
 		)
+		// return (
+		// 	<div>
+		// 		<input key="item-name-input"
+		// 			ref={this.itemNameInput}
+		// 			placeholder="new item name"
+		// 		/>
+		// 		<button onClick={()=>{this.handleSaveItem()}}>save</button>
+		// 		<button
+		// 			onClick={()=>{this.setState({addingItem: false, itemSearch: ""})}}
+		// 		>x</button>
+		// 	</div>
+		// )
 	}
 
 	displayItemList() {
@@ -91,7 +99,7 @@ class Items extends React.Component {
 			itemsJSX.push(
 				<div
 					key={i} className="item-box"
-					onClick={()=>this.props.toggleItemSelect(categoryIndex, i)}
+					onClick={() => this.props.toggleItemSelect(categoryIndex, i)}
 				>
 					<label
 						style={isSelected ? selectedStyle : unselectedStyle}
@@ -128,6 +136,7 @@ class Items extends React.Component {
 	render() {
 		return (
 			<div id="items-box">
+				{this.state.addingItem ? this.displayAddItem() : null}
 				<div>
 					{this.state.editingCategoryName ? this.displayEditCategoryInput() : this.displayCategoryDropdown()}
 					<button onClick={()=>{
@@ -137,7 +146,7 @@ class Items extends React.Component {
 					</button>
 				</div>
 				<div>
-					{this.state.addingItem ? this.displayAddItem() : this.displayItemSearch()}
+					{this.displayItemSearch()}
 				</div>
 				<div>
 					{this.displayItemList()}

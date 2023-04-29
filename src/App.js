@@ -12,7 +12,7 @@ class App extends React.Component {
 		}
 
 		this.updateCategoryName = this.updateCategoryName.bind(this)
-		this.toggleItemSelect = this.updateCategoryName.bind(this)
+		this.toggleItemSelect = this.toggleItemSelect.bind(this)
 		this.addItem = this.addItem.bind(this)
 	}
 
@@ -82,15 +82,13 @@ class App extends React.Component {
 		let stateData = this.state.data
 		let newCategoryItems = stateData.itemCategories[categoryIndex].items
 
-		newCategoryItems.push(
-			{
-				itemName: itemName,
-				selected: true,
-				crossedOff: false,
-				qtySelect: qtySelect,
-				qty: 1
-			}
-		)
+		newCategoryItems.push({
+			itemName: itemName,
+			selected: true,
+			crossedOff: false,
+			qtySelect: qtySelect,
+			qty: 1
+		})
 
 		newCategoryItems.sort(
 			(a, b) =>  a.itemName > b.itemName ? 1 : -1
@@ -113,7 +111,7 @@ class App extends React.Component {
 			currentComponent =
 				<Items
 					data={this.state.data}
-					updateNewCategoryName={this.updateCategoryName}
+					updateCategoryName={this.updateCategoryName}
 					toggleItemSelect={this.toggleItemSelect}
 					addItem={this.addItem}
 				/>
