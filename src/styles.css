@@ -51,16 +51,22 @@ body {
 }
 
 button {
-	margin: 2vh;
+	color: black;
+	border-radius: 0%;
+	margin: 1vh;
 	padding-top: 1vh;
 	padding-bottom: 1vh;
 	padding-left: 2vh;
 	padding-right: 2vh;
 	font-size: 3.5vh;
 	font-weight: bold;
+	cursor: pointer;
+	border-style: none;
 }
 
 select {
+	color: black;
+	border-radius: 0%;
 	font-weight: bold;
 	border: none;
 	font-size: 3.5vh;
@@ -68,14 +74,21 @@ select {
 	background-color: rgb(125,125,125);
 	width: 25vh;
 	padding: 1vh;
+	margin: 2vh;
 }
 
-input {
+.txt-input {
+	border-radius: 0%;
 	width: 25vh;
 	font-size: 3.5vh;
 	font-weight: bold;
 	border: none;
 	padding: 1vh;
+	margin: 2vh;
+}
+
+.sm-input {
+	width: 10vh;
 }
 
 #items-box {
@@ -90,8 +103,12 @@ input {
 }
 
 .item-box {
-	margin-top: 2vh;
+	padding-left: 2vh;
 	margin-bottom: 2vh;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	cursor: pointer;
 }
 
 #dimmer {
@@ -101,11 +118,38 @@ input {
 	background-color: rgba(0, 0, 0, .5);
 	height: 100%;
 	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 #add-item {
-	position: absolute;
-	top: 0;
-	left: 0;
+	background-color: rgb(125,125,125);
+	padding: 3vh;
+	margin: 3vh;
+}
+
+.form-row {
+	display: flex;
+	align-items: center;
+	margin-top: 2vh;
+	margin-bottom: 2vh;
+}
+
+.cbox {
+	width: 3vh;
+	height: 3vh;
+	margin: 1vh;
+}
+
+#item-list {
+	width: 100%;
+}
+
+.delete-button {
+	border-radius: 50%;
 	background-color: red;
+	color: white;
+	width: 6vh;
+	height: 6vh;
 }

@@ -8,13 +8,19 @@ class Items extends React.Component {
 			categoryIndex: 0,
 			editingCategoryName: false,
 			addingItem: false,
-			itemSearch: ""
+			itemSearch: "",
+			addItemForm: {
+				itemName: "",
+				inputQty: false,
+				qty: null,
+				unit: ""
+			}
 		}
 
 		this.categoryNameInput = React.createRef()
-		this.itemNameInput = React.createRef()
 
 		this.handleCategorySave = this.handleCategorySave.bind(this);
+		this.handleAddFormEdit = this.handleAddFormEdit.bind(this);
 	}
 
 	displayCategoryDropdown() {
@@ -38,7 +44,11 @@ class Items extends React.Component {
 		let categories = this.props.data.itemCategories
 		let initValue = categories[this.state.categoryIndex].categoryName
 		return (
-			<input defaultValue={initValue} ref={this.categoryNameInput}/>
+			<input
+				defaultValue={initValue}
+				ref={this.categoryNameInput}
+				className="txt-input"
+			/>
 		)
 	}
 
@@ -48,6 +58,7 @@ class Items extends React.Component {
 				<input key="item-search"
 					onChange={(e)=>{this.setState({itemSearch: e.target.value})}}
 					placeholder="search for item"
+					className="txt-input"
 				/>
 				<button onClick={()=>{this.setState({addingItem: true})}}>new item</button>
 			</div>
@@ -56,26 +67,51 @@ class Items extends React.Component {
 	}
 
 	displayAddItem() {
+		let qtyInputs = null
+		if (this.state.addItemForm.inputQty) {
+			qtyInputs = [<div key="qty-inputs">
+				<input
+					placeholder="qty"
+					className="txt-input sm-input"
+					onChange={(e)=>{this.handleAddFormEdit(e, "qty")}}
+					type="number"
+				/>
+				<input
+					placeholder="unit"
+					className="txt-input sm-input"
+					onChange={(e)=>{this.handleAddFormEdit(e, "unit")}}
+				/>
+			</div>]
+		}
+
 		return (
 			<div>
-				<div style={{zIndez: "1"}} id="dimmer"></div>
-				<div id="add-item" style={{zIndex: "10"}}>
-					<label>add new item</label>
+				<div id="dimmer">
+					<div id="add-item">
+						<div className="form-row">
+							<input
+								placeholder="new item name"
+								className="txt-input"
+								onChange={(e)=>{this.handleAddFormEdit(e, "itemName")}}
+							/>
+						</div>
+						<div className="form-row">
+							<input
+								type="checkbox"
+								className="cbox"
+								onChange={(e)=>{this.handleAddFormEdit(e, "inputQty")}}
+							/>
+							<strong><label>input qty?</label></strong>
+						</div>
+						{qtyInputs}
+						<div className="form-row">
+							<button onClick={()=>this.handleOpenAddForm()}>cancel</button>
+							<button>add</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		)
-		// return (
-		// 	<div>
-		// 		<input key="item-name-input"
-		// 			ref={this.itemNameInput}
-		// 			placeholder="new item name"
-		// 		/>
-		// 		<button onClick={()=>{this.handleSaveItem()}}>save</button>
-		// 		<button
-		// 			onClick={()=>{this.setState({addingItem: false, itemSearch: ""})}}
-		// 		>x</button>
-		// 	</div>
-		// )
 	}
 
 	displayItemList() {
@@ -89,12 +125,24 @@ class Items extends React.Component {
 		const selectedStyle = {fontWeight: "bold"}
 		const unselectedStyle = {fontStyle: "italic", color: "rgb(200,200,200)"}
 
+		let editing = this.state.editingCategoryName
+
 		for (let i=0; i<categoryItems.length; i++) {
 			let item = categoryItems[i]
 			let itemName = item.itemName
 			let isSelected = item.selected
 
 			if (itemName && !itemName.includes(itemSearch)) continue
+
+			let deleteButton = null
+			if (editing) {
+				deleteButton = [<button
+					key={`dlt-${i}`}
+					className="delete-button"
+					onClick={()=>this.props.deleteItem(categoryIndex, i)}
+				>x
+				</button>]
+			}
 
 			itemsJSX.push(
 				<div
@@ -105,15 +153,12 @@ class Items extends React.Component {
 						style={isSelected ? selectedStyle : unselectedStyle}
 						className="item">{itemName}
 					</label>
+					{deleteButton}
 				</div>
 			)
 		}
 
-		return(
-			<div>
-				{itemsJSX}
-			</div>
-		)
+		return itemsJSX
 	}
 
 	handleCategoryEdit() {
@@ -133,6 +178,26 @@ class Items extends React.Component {
 		)
 	}
 
+	handleOpenAddForm() {
+		this.setState({
+			addingItem: false,
+			addItemForm: {
+				itemName: "",
+				inputQty: false,
+				qty: null,
+				unit: ""
+			}
+		})
+	}
+
+	handleAddFormEdit(e, field) {
+		let addFormObj = this.state.addItemForm
+		let newValue = e.target.value
+		if (field==="inputQty") newValue = e.target.checked
+		addFormObj[field] = newValue
+		this.setState({addItemForm: addFormObj})
+	}
+
 	render() {
 		return (
 			<div id="items-box">
@@ -148,7 +213,7 @@ class Items extends React.Component {
 				<div>
 					{this.displayItemSearch()}
 				</div>
-				<div>
+				<div id="item-list">
 					{this.displayItemList()}
 				</div>
 			</div>

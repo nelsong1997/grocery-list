@@ -14,6 +14,7 @@ class App extends React.Component {
 		this.updateCategoryName = this.updateCategoryName.bind(this)
 		this.toggleItemSelect = this.toggleItemSelect.bind(this)
 		this.addItem = this.addItem.bind(this)
+		this.deleteItem = this.deleteItem.bind(this)
 	}
 
 	// load data
@@ -49,6 +50,8 @@ class App extends React.Component {
 		} catch (err) {
 			theData = defaultData
 		}
+
+		if (!theData) theData = defaultData // null/undf
 
 		// sort items alphabetically
 		for (let i=0; i<4; i++) {
@@ -99,6 +102,18 @@ class App extends React.Component {
 		this.saveData(stateData)
 	}
 
+	deleteItem(categoryIndex, itemIndex) {
+		let stateData = this.state.data
+		let newCategoryItems = stateData.itemCategories[categoryIndex].items
+		// delete item
+		newCategoryItems = newCategoryItems.slice(
+			0, itemIndex).concat(
+				newCategoryItems.slice(
+					itemIndex+1, newCategoryItems.length))
+		stateData.itemCategories[categoryIndex].items = newCategoryItems
+		this.setState({data: stateData})
+	}
+
 	render() {
 		let currentComponent = null
 		if (this.state.page==="list") {
@@ -114,6 +129,7 @@ class App extends React.Component {
 					updateCategoryName={this.updateCategoryName}
 					toggleItemSelect={this.toggleItemSelect}
 					addItem={this.addItem}
+					deleteItem={this.deleteItem}
 				/>
 		}
 		return (
