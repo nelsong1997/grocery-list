@@ -157,74 +157,8 @@ export default App;
 // 					itemName: "banana",
 // 					selected: true,
 // 					qtySelect: false,
-// 					qty: null,
+// 					qty: "",
+//                  unit: "",
 //					crossedOff: false
 // 				},
-// 				{
-// 					itemName: "apple",
-// 					selected: false,
-// 					qtySelect: true,
-// 					qty: null,
-//					crossedOff: false
-// 				}
-// 			]
-// 		},
-// 		{
-// 			categoryName: "category 2",
-// 			items: [
-// 				{
-// 					itemName: "banana2",
-// 					selected: false,
-// 					qtySelect: false,
-// 					qty: null,
-//					crossedOff: false
-// 				},
-// 				{
-// 					itemName: "apple2",
-// 					selected: false,
-// 					qtySelect: true,
-// 					qty: null,
-//					crossedOff: false
-// 				}
-// 			]
-// 		},
-// 		{
-// 			categoryName: "category 3",
-// 			items: [
-// 				{
-// 					itemName: "banana3",
-// 					selected: false,
-// 					qtySelect: false,
-// 					qty: null,
-//					crossedOff: false
-// 				},
-// 				{
-// 					itemName: "apple3",
-// 					selected: false,
-// 					qtySelect: true,
-// 					qty: null,
-//					crossedOff: false
-// 				}
-// 			]
-// 		},
-// 		{
-// 			categoryName: "category 4",
-// 			items: [
-// 				{
-// 					itemName: "banana4",
-// 					selected: false,
-// 					qtySelect: false,
-// 					qty: null,
-//					crossedOff: false
-// 				},
-// 				{
-// 					itemName: "apple4",
-// 					selected: false,
-// 					qtySelect: true,
-// 					qty: null,
-//					crossedOff: false
-// 				}
-// 			]
-// 		}
-// 	]
-// }
+//...
