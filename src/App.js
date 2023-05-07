@@ -76,25 +76,23 @@ class App extends React.Component {
 
 	toggleItemSelect(categoryIndex, itemIndex) {
 		let stateData = this.state.data
-		stateData.itemCategories[categoryIndex].items[itemIndex].selected =
-			!stateData.itemCategories[categoryIndex].items[itemIndex].selected
+		let newItem = stateData.itemCategories[categoryIndex].items[itemIndex]
+		newItem.selected = !newItem.selected
+		if (!newItem.selected) newItem.qty = ""
+
+		stateData.itemCategories[categoryIndex].items[itemIndex] = newItem
 		this.saveData(stateData)
 	}
 
-	addItem(categoryIndex, itemName, qtySelect) {
+	addItem(categoryIndex, itemObj) {
 		let stateData = this.state.data
 		let newCategoryItems = stateData.itemCategories[categoryIndex].items
 
-		newCategoryItems.push({
-			itemName: itemName,
-			selected: true,
-			crossedOff: false,
-			qtySelect: qtySelect,
-			qty: 1
-		})
+		newCategoryItems.push(itemObj)
 
+		// sort alphabetically
 		newCategoryItems.sort(
-			(a, b) =>  a.itemName > b.itemName ? 1 : -1
+			(a, b) => a.itemName > b.itemName ? 1 : -1
 		)
 
 		stateData.itemCategories[categoryIndex].items = newCategoryItems
@@ -103,14 +101,18 @@ class App extends React.Component {
 	}
 
 	deleteItem(categoryIndex, itemIndex) {
+		console.log(itemIndex)
+
 		let stateData = this.state.data
 		let newCategoryItems = stateData.itemCategories[categoryIndex].items
+
 		// delete item
 		newCategoryItems = newCategoryItems.slice(
 			0, itemIndex).concat(
 				newCategoryItems.slice(
 					itemIndex+1, newCategoryItems.length))
 		stateData.itemCategories[categoryIndex].items = newCategoryItems
+
 		this.setState({data: stateData})
 	}
 

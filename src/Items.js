@@ -12,9 +12,10 @@ class Items extends React.Component {
 			addItemForm: {
 				itemName: "",
 				inputQty: false,
-				qty: null,
+				qty: "",
 				unit: ""
-			}
+			},
+			inputtingQty: false
 		}
 
 		this.categoryNameInput = React.createRef()
@@ -53,6 +54,7 @@ class Items extends React.Component {
 	}
 
 	displayItemSearch() {
+		let editing = this.state.editingCategoryName
 		return (
 			<div>
 				<input key="item-search"
@@ -60,13 +62,16 @@ class Items extends React.Component {
 					placeholder="search for item"
 					className="txt-input"
 				/>
-				<button onClick={()=>{this.setState({addingItem: true})}}>new item</button>
+				<button
+					onClick={()=>{this.handleOpenAddForm()}}
+					disabled={editing}
+				>new item</button>
 			</div>
 			
 		)
 	}
 
-	displayAddItem() {
+	displayAddItemForm() {
 		let qtyInputs = null
 		if (this.state.addItemForm.inputQty) {
 			qtyInputs = [<div key="qty-inputs">
@@ -90,6 +95,7 @@ class Items extends React.Component {
 					<div id="add-item">
 						<div className="form-row">
 							<input
+								autoFocus={true}
 								placeholder="new item name"
 								className="txt-input"
 								onChange={(e)=>{this.handleAddFormEdit(e, "itemName")}}
@@ -105,8 +111,8 @@ class Items extends React.Component {
 						</div>
 						{qtyInputs}
 						<div className="form-row">
-							<button onClick={()=>this.handleOpenAddForm()}>cancel</button>
-							<button>add</button>
+							<button onClick={()=>this.setState({addingItem: false})}>cancel</button>
+							<button onClick={()=>this.handleAddItem()}>add</button>
 						</div>
 					</div>
 				</div>
@@ -126,11 +132,19 @@ class Items extends React.Component {
 		const unselectedStyle = {fontStyle: "italic", color: "rgb(200,200,200)"}
 
 		let editing = this.state.editingCategoryName
+		let pointerStyle = {cursor: "pointer"}
 
 		for (let i=0; i<categoryItems.length; i++) {
 			let item = categoryItems[i]
 			let itemName = item.itemName
 			let isSelected = item.selected
+			let inputQty = item.inputQty
+			let qty = ""
+			let unit = ""
+			if (inputQty && isSelected) {
+				qty = item.qty
+				unit = item.unit
+			}
 
 			if (itemName && !itemName.includes(itemSearch)) continue
 
@@ -144,14 +158,18 @@ class Items extends React.Component {
 				</button>]
 			}
 
+			let itemStyleObj = isSelected ? selectedStyle : unselectedStyle
+			if (!editing) itemStyleObj.cursor = "pointer"
+
 			itemsJSX.push(
 				<div
 					key={i} className="item-box"
-					onClick={() => this.props.toggleItemSelect(categoryIndex, i)}
+					style={!editing ? pointerStyle : null}
+					onClick={!editing ? ()=>this.handleItemClick(categoryIndex, i, inputQty, isSelected) : null}
 				>
 					<label
-						style={isSelected ? selectedStyle : unselectedStyle}
-						className="item">{itemName}
+						style={itemStyleObj}
+						className="item">{`${qty ? `${qty} ` : ``}${unit ? `${unit} ` : ``}${itemName}`}
 					</label>
 					{deleteButton}
 				</div>
@@ -170,21 +188,30 @@ class Items extends React.Component {
 		this.setState({editingCategoryName: false})
 	}
 
-	handleSaveItem() {
-		this.props.addItem(
-			this.state.categoryIndex,
-			this.itemNameInput.current.value,
-			false
-		)
+	handleAddItem() {
+		let theState = this.state
+		let addItemForm = theState.addItemForm
+		let categoryIndex = theState.categoryIndex
+		let newItem = addItemForm
+
+		newItem.selected = true
+		newItem.crossedOff = false
+		if (!newItem.inputQty) {
+			newItem.qty = ""
+			newItem.unit = ""
+		}
+
+		this.props.addItem(categoryIndex, newItem)
+		this.setState({addingItem: false})
 	}
 
 	handleOpenAddForm() {
 		this.setState({
-			addingItem: false,
+			addingItem: true,
 			addItemForm: {
 				itemName: "",
 				inputQty: false,
-				qty: null,
+				qty: "",
 				unit: ""
 			}
 		})
@@ -193,15 +220,26 @@ class Items extends React.Component {
 	handleAddFormEdit(e, field) {
 		let addFormObj = this.state.addItemForm
 		let newValue = e.target.value
-		if (field==="inputQty") newValue = e.target.checked
+		if (field==="inputQty") {
+			newValue = e.target.checked
+			if (!newValue) {
+				addFormObj.qty = ""
+				addFormObj.unit = ""
+			}
+		}
 		addFormObj[field] = newValue
 		this.setState({addItemForm: addFormObj})
+	}
+
+	handleItemClick(categoryIndex, itemIndex, inputQty, isSelected) {
+		if (inputQty && !isSelected) this.setState({inputtingQty: true})
+		else this.props.toggleItemSelect(categoryIndex, itemIndex)
 	}
 
 	render() {
 		return (
 			<div id="items-box">
-				{this.state.addingItem ? this.displayAddItem() : null}
+				{this.state.addingItem ? this.displayAddItemForm() : null}
 				<div>
 					{this.state.editingCategoryName ? this.displayEditCategoryInput() : this.displayCategoryDropdown()}
 					<button onClick={()=>{
