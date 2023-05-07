@@ -122,7 +122,7 @@ select {
 	align-items: center;
 }
 
-#add-item {
+#add-item, #input-qty {
 	background-color: rgb(125,125,125);
 	padding: 3vh;
 	margin: 3vh;

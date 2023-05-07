@@ -15,7 +15,8 @@ class Items extends React.Component {
 				qty: "",
 				unit: ""
 			},
-			inputtingQty: false
+			inputtingQty: false,
+			inputQtyItemIndex: null
 		}
 
 		this.categoryNameInput = React.createRef()
@@ -23,6 +24,8 @@ class Items extends React.Component {
 		this.handleCategorySave = this.handleCategorySave.bind(this);
 		this.handleAddFormEdit = this.handleAddFormEdit.bind(this);
 	}
+
+	// ---- Display ---- //
 
 	displayCategoryDropdown() {
 		let categories = this.props.data.itemCategories
@@ -120,6 +123,37 @@ class Items extends React.Component {
 		)
 	}
 
+	displayInputQtyForm() {
+		let categoryIndex = this.state.categoryIndex
+		let itemIndex = this.state.inputQtyItemIndex
+
+		let itemObj = this.props.data.itemCategories[categoryIndex].items[itemIndex]
+
+		return (
+			<div>
+				<div id="dimmer">
+					<div id="input-qty">
+						<div className="form-row">
+							<strong><label>{itemObj.itemName}</label></strong>
+						</div>
+						<div className="form-row">
+							<input
+								placeholder="qty"
+								className="txt-input sm-input"
+								type="number"
+							/>
+							<strong><label>{itemObj.unit}</label></strong>
+						</div>
+						<div className="form-row">
+							<button onClick={()=>this.setState({inputtingQty: false})}>cancel</button>
+							<button>select</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		)
+	}
+
 	displayItemList() {
 		let categoryIndex = this.state.categoryIndex
 		let categoryItems = this.props.data.itemCategories[categoryIndex].items
@@ -179,6 +213,8 @@ class Items extends React.Component {
 		return itemsJSX
 	}
 
+	// ---- Handlers ---- //
+
 	handleCategoryEdit() {
 		this.setState({editingCategoryName: true})
 	}
@@ -232,14 +268,18 @@ class Items extends React.Component {
 	}
 
 	handleItemClick(categoryIndex, itemIndex, inputQty, isSelected) {
-		if (inputQty && !isSelected) this.setState({inputtingQty: true})
-		else this.props.toggleItemSelect(categoryIndex, itemIndex)
+		if (inputQty && !isSelected) {
+			this.setState({inputtingQty: true, inputQtyItemIndex: itemIndex})
+		} else this.props.toggleItemSelect(categoryIndex, itemIndex)
 	}
+
+	// ---- Render ---- //
 
 	render() {
 		return (
 			<div id="items-box">
 				{this.state.addingItem ? this.displayAddItemForm() : null}
+				{this.state.inputtingQty ? this.displayInputQtyForm() : null}
 				<div>
 					{this.state.editingCategoryName ? this.displayEditCategoryInput() : this.displayCategoryDropdown()}
 					<button onClick={()=>{
