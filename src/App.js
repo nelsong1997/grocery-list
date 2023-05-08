@@ -74,11 +74,12 @@ class App extends React.Component {
 		this.saveData(stateData)
 	}
 
-	toggleItemSelect(categoryIndex, itemIndex) {
+	toggleItemSelect(categoryIndex, itemIndex, qty) {
 		let stateData = this.state.data
 		let newItem = stateData.itemCategories[categoryIndex].items[itemIndex]
 		newItem.selected = !newItem.selected
 		if (!newItem.selected) newItem.qty = ""
+		if (qty) newItem.qty = qty
 
 		stateData.itemCategories[categoryIndex].items[itemIndex] = newItem
 		this.saveData(stateData)
@@ -101,8 +102,6 @@ class App extends React.Component {
 	}
 
 	deleteItem(categoryIndex, itemIndex) {
-		console.log(itemIndex)
-
 		let stateData = this.state.data
 		let newCategoryItems = stateData.itemCategories[categoryIndex].items
 
@@ -162,3 +161,8 @@ export default App;
 //					crossedOff: false
 // 				},
 //...
+
+//import/export
+//bug with editing category names -> revert to first category
+//crossing off logic
+//compound text logic

@@ -20,6 +20,7 @@ class Items extends React.Component {
 		}
 
 		this.categoryNameInput = React.createRef()
+		this.qtyInput = React.createRef()
 
 		this.handleCategorySave = this.handleCategorySave.bind(this);
 		this.handleAddFormEdit = this.handleAddFormEdit.bind(this);
@@ -138,15 +139,20 @@ class Items extends React.Component {
 						</div>
 						<div className="form-row">
 							<input
+								autoFocus={true}
 								placeholder="qty"
 								className="txt-input sm-input"
 								type="number"
+								ref={this.qtyInput}
 							/>
 							<strong><label>{itemObj.unit}</label></strong>
 						</div>
 						<div className="form-row">
 							<button onClick={()=>this.setState({inputtingQty: false})}>cancel</button>
-							<button>select</button>
+							<button
+								onClick={()=>this.handleSelectQtyItem(this.qtyInput.current.value)}
+							>
+							select</button>
 						</div>
 					</div>
 				</div>
@@ -271,6 +277,13 @@ class Items extends React.Component {
 		if (inputQty && !isSelected) {
 			this.setState({inputtingQty: true, inputQtyItemIndex: itemIndex})
 		} else this.props.toggleItemSelect(categoryIndex, itemIndex)
+	}
+
+	handleSelectQtyItem(qty) {
+		let categoryIndex = this.state.categoryIndex
+		let itemIndex = this.state.inputQtyItemIndex
+		this.props.toggleItemSelect(categoryIndex, itemIndex, qty)
+		this.setState({inputtingQty: false, inputQtyItemIndex: null})
 	}
 
 	// ---- Render ---- //
