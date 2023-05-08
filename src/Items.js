@@ -39,7 +39,10 @@ class Items extends React.Component {
 		}
 
 		return (
-			<select onChange={(e)=>{this.setState({categoryIndex: e.target.value})}}>
+			<select 
+				onChange={(e)=>{this.setState({categoryIndex: e.target.value})}}
+				value={this.state.categoryIndex}
+			>
 				{optionsJSX}
 			</select>
 		)

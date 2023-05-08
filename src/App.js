@@ -15,6 +15,7 @@ class App extends React.Component {
 		this.toggleItemSelect = this.toggleItemSelect.bind(this)
 		this.addItem = this.addItem.bind(this)
 		this.deleteItem = this.deleteItem.bind(this)
+		this.toggleItemCrossedOff = this.toggleItemCrossedOff.bind(this)
 	}
 
 	// load data
@@ -112,7 +113,15 @@ class App extends React.Component {
 					itemIndex+1, newCategoryItems.length))
 		stateData.itemCategories[categoryIndex].items = newCategoryItems
 
-		this.setState({data: stateData})
+		this.saveData(stateData)
+	}
+
+	toggleItemCrossedOff(categoryIndex, itemIndex) {
+		let stateData = this.state.data
+		let newItem = stateData.itemCategories[categoryIndex].items[itemIndex]
+		newItem.crossedOff = !newItem.crossedOff
+		stateData.itemCategories[categoryIndex].items[itemIndex] = newItem
+		this.saveData(stateData)
 	}
 
 	render() {
@@ -121,6 +130,7 @@ class App extends React.Component {
 			currentComponent = 
 				<List 
 					data={this.state.data}
+					toggleItemCrossedOff={this.toggleItemCrossedOff}
 				/>
 		}
 		else if (this.state.page==="items") {

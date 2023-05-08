@@ -154,3 +154,10 @@ select {
 	padding: 0vh;
 	font-size: 3vh;
 }
+
+.list-item {
+	padding-top: .5vh;
+	padding-bottom: .5vh;
+	cursor: pointer;
+	user-select: none;
+}

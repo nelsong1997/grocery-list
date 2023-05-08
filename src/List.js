@@ -17,15 +17,40 @@ class List extends React.Component {
 
 			for (let i=0; i<categoryItems.length; i++) {
 				let itemObj = categoryItems[i]
-				if (!itemObj.selected) continue
+				let itemName = itemObj.itemName
+				let crossedOff = itemObj.crossedOff
+				let inputQty = itemObj.inputQty
+				let isSelected = itemObj.selected
+				let qty = ""
+				let unit = ""
+				if (inputQty) {
+					qty = itemObj.qty
+					unit = itemObj.unit
+				}
+
+				let crossedStyle = {}
+				if (crossedOff) {
+					crossedStyle = {
+						color: "rgb(200,200,200)",
+						textDecoration: "line-through",
+						fontStyle: "italic"
+					}
+				}
+				
+				if (!isSelected) continue
 				categoryItemsJSX.push(
-					<label key={i}>{itemObj.itemName}</label>
+					<label
+						key={i}
+						className="list-item"
+						style={crossedStyle}
+						onClick={()=>this.props.toggleItemCrossedOff(categoryIndex, i)}
+					>{`${qty ? `${qty} ` : ``}${unit ? `${unit} ` : ``}${itemName}`}</label>
 				)
 			}
 
 			if (categoryItemsJSX.length===0) {
 				categoryItemsJSX.push(
-					<label key="0"><em>(none)</em></label>
+					<label key="0" style={{color: "rgb(200,200,200)"}}><em>(none)</em></label>
 				)
 			}
 
