@@ -3,6 +3,8 @@ import List from './List.js'
 import Items from './Items.js'
 import './styles.css';
 
+import Papa from 'papaparse'
+
 class App extends React.Component {
 	constructor() {
 		super()
@@ -171,6 +173,88 @@ class App extends React.Component {
 		this.setState({clearingSelections: false})
 	}
 
+	handleDownloadData() {
+		let stateData = this.state.data
+		let itemCategories = stateData.itemCategories
+		
+
+		let rowsArr = [
+			//include category names every 4 columns
+			[
+				itemCategories[0].categoryName, '', '', '',
+				itemCategories[1].categoryName, '', '', '',
+				itemCategories[2].categoryName, '', '', '',
+				itemCategories[3].categoryName, '', '', ''
+			],
+			//hardcode column headers
+			[
+				'qty', 'unit', 'item name', 'selected',
+				'qty', 'unit', 'item name', 'selected',
+				'qty', 'unit', 'item name', 'selected',
+				'qty', 'unit', 'item name', 'selected'
+			]
+		]
+
+		let longestListLength = Math.max(
+			itemCategories[0].items.length,
+			itemCategories[1].items.length,
+			itemCategories[2].items.length,
+			itemCategories[3].items.length
+		)
+
+		//start at row 2 since we already added 2 rows manually
+		for (let row = 2; row < longestListLength + 2; row++) {
+			let dataIdx = row - 2
+			rowsArr.push([])
+			for (let catId = 0; catId < 4; catId++) {
+				let itemObj = itemCategories[catId].items[dataIdx]
+				//we've hit the end of the list for this category
+				if (!itemObj) {
+					rowsArr[row].push('', '', '', '')
+					continue
+				}
+
+				// 1st and 2nd columns for cat
+				if (!itemObj.inputQty) {
+					//qty and unit are blank when we don't input qty
+					rowsArr[row].push('', '')
+				} else {
+					if (!itemObj.selected) {
+						//qty is blank when not selected
+						rowsArr[row].push('')
+					} else {
+						rowsArr[row].push(itemObj.qty)
+					}
+					//populate unit
+					rowsArr[row].push(itemObj.unit)
+				}
+
+				// 3rd column - item name
+				rowsArr[row].push(itemObj.itemName)
+
+				// 4th column - selected - x for selected, blank for not
+				if (itemObj.selected) rowsArr[row].push('x')
+				else rowsArr[row].push('')
+			}
+		}
+
+		let csvStr = Papa.unparse(rowsArr)
+
+		// https://theroadtoenterprise.com/blog/how-to-download-csv-and-json-files-in-react
+		let blob = new Blob([csvStr], { type: 'text/csv' })
+		
+		let a = document.createElement('a')
+		a.download = 'grocery list.csv'
+		a.href = window.URL.createObjectURL(blob)
+		let clickEvt = new MouseEvent('click', {
+			view: window,
+			bubbles: true,
+			cancelable: true,
+		})
+		a.dispatchEvent(clickEvt)
+		a.remove()
+	}
+
 	render() {
 		let currentComponent = null
 		if (this.state.page==="list") {
@@ -197,6 +281,8 @@ class App extends React.Component {
 					<button onClick={()=>this.setState({page: "list"})}>list</button>
 					<button onClick={()=>this.setState({page: "items"})}>items</button>
 					<button onClick={()=>this.setState({clearingSelections: true})}>clear</button>
+					<button onClick={()=>this.handleDownloadData()}>↓</button>
+					<button>↑</button>
 				</div>
 				{currentComponent}
 			</div>
@@ -214,7 +300,7 @@ export default App;
 // 				{
 // 					itemName: "banana",
 // 					selected: true,
-// 					qtySelect: false,
+// 					inputQty: false,
 // 					qty: "",
 //                  unit: "",
 //					crossedOff: false

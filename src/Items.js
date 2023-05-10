@@ -193,12 +193,13 @@ class Items extends React.Component {
 
 			let deleteButton = null
 			if (editing) {
-				deleteButton = [<button
+				deleteButton = [
+				<div><button
 					key={`dlt-${i}`}
 					className="delete-button"
 					onClick={()=>this.props.deleteItem(categoryIndex, i)}
 				>x
-				</button>]
+				</button></div>]
 			}
 
 			let itemStyleObj = isSelected ? selectedStyle : unselectedStyle
