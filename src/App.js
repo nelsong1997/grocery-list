@@ -8,7 +8,8 @@ class App extends React.Component {
 		super()
 		this.state = {
 			page: "list",
-			data: {}
+			data: {},
+			clearingSelections: false
 		}
 
 		this.updateCategoryName = this.updateCategoryName.bind(this)
@@ -18,7 +19,7 @@ class App extends React.Component {
 		this.toggleItemCrossedOff = this.toggleItemCrossedOff.bind(this)
 	}
 
-	// load data
+	// ---- Load Data ---- //
 	componentDidMount() {
 		let dataStr = localStorage.getItem("data")
 
@@ -64,10 +65,14 @@ class App extends React.Component {
 		this.saveData(theData)
 	}
 
+	// ---- Save Data ---- //
+
 	saveData(data) {
 		localStorage.setItem("data", JSON.stringify(data))
 		this.setState({data: data})
 	}
+
+	// ---- Manage Global Data/State ---- //
 
 	updateCategoryName(categoryIndex, newName) {
 		let stateData = this.state.data
@@ -124,6 +129,48 @@ class App extends React.Component {
 		this.saveData(stateData)
 	}
 
+	// ---- Display ---- //
+
+	displayClearConfirm() {
+		return (
+			<div>
+				<div id="dimmer">
+					<div id="clear-selections">
+						<div className="form-row">
+							<strong><label>Really clear all selections?</label></strong>
+						</div>
+						<div className="form-row">
+							<button onClick={()=>this.setState({clearingSelections: false})}>cancel</button>
+							<button onClick={()=>this.handleClearSelections()}>confirm</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		)
+	}
+
+	// ---- Handlers ---- //
+
+	handleClearSelections() {
+		let newStateData = this.state.data
+		let newItemCategories = newStateData.itemCategories
+
+		//categories
+		for (let i=0; i<4; i++) {
+			//items
+			for (let j=0; j < newItemCategories[i].items.length; j++) {
+				newItemCategories[i].items[j].selected = false
+				newItemCategories[i].items[j].qty = ""
+				newItemCategories[i].items[j].crossedOff = false
+			}
+		}
+
+		newStateData.itemCategories = newItemCategories
+
+		this.saveData(newStateData)
+		this.setState({clearingSelections: false})
+	}
+
 	render() {
 		let currentComponent = null
 		if (this.state.page==="list") {
@@ -145,9 +192,11 @@ class App extends React.Component {
 		}
 		return (
 			<div id="center-box">
+				{this.state.clearingSelections ? this.displayClearConfirm() : null}
 				<div id="view-select">
 					<button onClick={()=>this.setState({page: "list"})}>list</button>
 					<button onClick={()=>this.setState({page: "items"})}>items</button>
+					<button onClick={()=>this.setState({clearingSelections: true})}>clear</button>
 				</div>
 				{currentComponent}
 			</div>
@@ -173,6 +222,4 @@ export default App;
 //...
 
 //import/export
-//bug with editing category names -> revert to first category
-//crossing off logic
-//compound text logic
+//ellipses on items

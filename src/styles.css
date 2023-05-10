@@ -4,7 +4,7 @@ p, label, h1, h2, h3, h4 {
 }
 
 p, label, h4 {
-	font-size: 3.5vh
+	font-size: 3vh
 }
 
 body {
@@ -100,11 +100,15 @@ select {
 .item {
 	font-size: 5.5vh;
 	user-select: none;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .item-box {
 	padding-left: 2vh;
 	margin-bottom: 2vh;
+	max-width: 100vw;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -122,7 +126,7 @@ select {
 	align-items: center;
 }
 
-#add-item, #input-qty {
+#add-item, #input-qty, #clear-selections {
 	background-color: rgb(125,125,125);
 	padding: 3vh;
 	margin: 3vh;
@@ -160,4 +164,8 @@ select {
 	padding-bottom: .5vh;
 	cursor: pointer;
 	user-select: none;
+	max-width: 24vh;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
