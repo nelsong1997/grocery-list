@@ -268,11 +268,14 @@ class App extends React.Component {
 
 		let csvStr = Papa.unparse(rowsArr)
 
+		let now = new Date()
+		let dateStr = now.toLocaleDateString('en-us').replaceAll('/', '-')
+
 		// https://theroadtoenterprise.com/blog/how-to-download-csv-and-json-files-in-react
 		let blob = new Blob([csvStr], { type: 'text/csv' })
 		
 		let a = document.createElement('a')
-		a.download = 'grocery list.csv'
+		a.download = `grocery list ${dateStr}.csv`
 		a.href = window.URL.createObjectURL(blob)
 		let clickEvt = new MouseEvent('click', {
 			view: window,
