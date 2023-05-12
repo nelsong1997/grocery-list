@@ -51,7 +51,7 @@ class List extends React.Component {
 
 			if (categoryItemsJSX.length===0) {
 				categoryItemsJSX.push(
-					<label key="0" style={{color: "rgb(200,200,200)"}}><em>(none)</em></label>
+					<label key="0" className="no-item">(none)</label>
 				)
 			}
 

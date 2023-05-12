@@ -169,3 +169,11 @@ select {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+.no-item {
+	padding-top: .5vh;
+	padding-bottom: .5vh;
+	user-select: none;
+	color: rgb(200,200,200);
+	font-style: italic;
+}
