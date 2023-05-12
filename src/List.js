@@ -25,7 +25,8 @@ class List extends React.Component {
 				let unit = ""
 				if (inputQty) {
 					qty = itemObj.qty
-					unit = itemObj.unit
+					//if there's no qty, don't display unit
+					unit = qty ? itemObj.unit : ''
 				}
 
 				let crossedStyle = {}

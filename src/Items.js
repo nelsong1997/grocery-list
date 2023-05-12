@@ -186,10 +186,13 @@ class Items extends React.Component {
 			let unit = ""
 			if (inputQty && isSelected) {
 				qty = item.qty
-				unit = item.unit
+				//if there's no qty, don't display unit
+				unit = qty ? item.unit : ''
 			}
 
-			if (itemName && !itemName.includes(itemSearch)) continue
+			let itemText = `${qty ? `${qty} ` : ``}${unit ? `${unit} ` : ``}${itemName}`
+
+			if (itemText && !itemText.includes(itemSearch)) continue
 
 			let deleteButton = null
 			if (editing) {
@@ -213,7 +216,7 @@ class Items extends React.Component {
 				>
 					<label
 						style={itemStyleObj}
-						className="item">{`${qty ? `${qty} ` : ``}${unit ? `${unit} ` : ``}${itemName}`}
+						className="item">{itemText}
 					</label>
 					{deleteButton}
 				</div>

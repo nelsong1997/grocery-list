@@ -126,7 +126,7 @@ select {
 	align-items: center;
 }
 
-#add-item, #input-qty, #clear-selections {
+#add-item, #input-qty, #clear-selections, #upload-menu {
 	background-color: rgb(125,125,125);
 	padding: 3vh;
 	margin: 3vh;
